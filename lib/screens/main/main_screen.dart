@@ -52,9 +52,60 @@ class MainScreen extends StatefulWidget {
 }
 
 class MainScreenState extends State<MainScreen> {
-  void addTodo(Todo todo) async {}
-  void updateTodo({int index, Todo todo}) async {}
-  void removeTodo(int index) async {}
+  User _user;
+  get user => _user;
+  set user(value) {
+    _user = value;
+    refreshTodoListFuture();
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _user = User(id: 1);
+  //   //_todoListFuture = TodoService.getTodoListByUser(_user.id);
+  // }
+
+  List<Todo> _todoList;
+  get todoList => _todoList;
+  set todoList(value) => _todoList = value;
+
+  Future<List<Todo>> _todoListFuture;
+  get todoListFuture => _todoListFuture;
+  set todoListFuture(value) => _todoListFuture = value;
+
+  void refreshTodoListFuture() {
+    if (_user != null) {
+      _todoListFuture = TodoService.getTodoListByUser(_user.id);
+      setState(() {});
+    }
+  }
+
+  void addTodo(Todo todo) async {
+    if (_user != null) {
+      todo.user = _user.id;
+      final Todo _todo = await TodoService.addTodo(todo);
+      setState(() => _todoList.add(_todo));
+    }
+  }
+
+  void updateTodo({int index, Todo todo}) async {
+    if (_user != null) {
+      todo.id = index;
+      final Todo _todo = await TodoService.updateTodo(todo);
+      print(_todo.id);
+      setState(() {});
+    }
+  }
+
+  void removeTodo(int index) async {
+    if (_user != null) {
+      final Todo todo = _todoList.elementAt(index);
+      print(todo.id);
+      await TodoService.removeTodo(todo.id);
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +113,15 @@ class MainScreenState extends State<MainScreen> {
       onWillPop: () => Future.value(false),
       child: SafeArea(
         child: Scaffold(
-          appBar: Bar(),
-          body: Body(),
-          floatingActionButton: Float(),
+          appBar: Bar(
+            state: this,
+          ),
+          body: _user != null ? Body(state: this) : null,
+          floatingActionButton: _user != null
+              ? Float(
+                  state: this,
+                )
+              : null,
         ),
       ),
     );

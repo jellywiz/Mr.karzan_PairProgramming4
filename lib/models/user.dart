@@ -47,4 +47,19 @@ class User {
             photoUrl: from.photoUrl,
             login: from.login,
             password: from.password);
+
+  User.fromJson(Map<String, dynamic> json)
+      : _id = json['id'],
+        _name = json['name'],
+        _photoUrl = json['photoUrl'],
+        _login = json['login'],
+        _password = json['password'];
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'photoUrl': photoUrl,
+        'login': login,
+        'password': password
+      };
 }
