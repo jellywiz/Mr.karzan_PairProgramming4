@@ -59,13 +59,6 @@ class MainScreenState extends State<MainScreen> {
     refreshTodoListFuture();
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _user = User(id: 1);
-  //   //_todoListFuture = TodoService.getTodoListByUser(_user.id);
-  // }
-
   List<Todo> _todoList;
   get todoList => _todoList;
   set todoList(value) => _todoList = value;

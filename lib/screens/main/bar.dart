@@ -29,16 +29,38 @@ class Bar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading:
-          CircleAvatar(backgroundImage: AssetImage('assets/unknown_user.png')),
+      leading: _state.user != null
+          ? CircleAvatar(
+              backgroundImage: NetworkImage('${_state.user.photoUrl}'))
+          : CircleAvatar(
+              backgroundImage: AssetImage('assets/unknown_user.png')),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('My Todo List'),
-          Text('User name goes here', style: TextStyle(fontSize: 12.0)),
+          if (_state.user != null)
+            Text('${_state.user.name}', style: TextStyle(fontSize: 12.0)),
         ],
       ),
-      actions: [IconButton(icon: Icon(Icons.login), onPressed: () {})],
+      actions: [
+        IconButton(
+          icon: Icon(Icons.login),
+          onPressed: () =>
+              _state.user != null ? _onLogout() : _onLogin(context),
+          color: _state.user != null ? Colors.red : Colors.black,
+        )
+      ],
     );
   }
+
+  void _onLogin(BuildContext context) async {
+    final _user = await Navigator.pushNamed(context, '/login');
+
+    if (_user == null) {
+      _state.user = null;
+    } else
+      _state.user = _user;
+  }
+
+  void _onLogout() => _state.user = null;
 }
