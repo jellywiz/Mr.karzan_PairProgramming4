@@ -13,7 +13,7 @@
 //      Besides, you will also need to pass the 'states' to the component.
 //-----------------------------------------------------------------------------------------------------------------------------
 
-import 'package:exercise3/models/user.dart';
+import '/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'body.dart';

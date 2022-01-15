@@ -6,7 +6,7 @@
 //      Besides, you will also need to pass the 'states' to the components.
 //-----------------------------------------------------------------------------------------------------------------------------
 
-import 'package:exercise3/screens/edit/bar.dart';
+import '/screens/edit/bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/todo.dart';

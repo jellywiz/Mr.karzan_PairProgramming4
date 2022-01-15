@@ -11,7 +11,7 @@
 //        b. Delete a todo - i.e. when the user long-press a todo
 //-----------------------------------------------------------------------------------------------------------------------------
 
-import 'package:exercise3/screens/edit/edit_screen.dart';
+import '/screens/edit/edit_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/todo.dart';

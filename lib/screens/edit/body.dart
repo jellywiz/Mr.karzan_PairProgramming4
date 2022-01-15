@@ -16,7 +16,7 @@
 //        b. Cancel the changes - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
-import 'package:exercise3/models/todo.dart';
+import '/models/todo.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_screen.dart';

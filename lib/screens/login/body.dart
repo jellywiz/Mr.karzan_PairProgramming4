@@ -17,8 +17,8 @@
 //        b. Cancel the login - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
-import 'package:exercise3/screens/edit/edit_screen.dart';
-import 'package:exercise3/services/rest.dart';
+import '/screens/edit/edit_screen.dart';
+import '/services/rest.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
