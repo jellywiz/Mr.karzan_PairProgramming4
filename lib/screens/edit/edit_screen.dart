@@ -31,14 +31,46 @@ class EditScreen extends StatefulWidget {
 }
 
 class EditScreenState extends State<EditScreen> {
+  String _title = '';
+  String _description = '';
+  bool _done;
+  dynamic _isEdit;
+  Todo _data;
+
+  get title => _title;
+  set title(value) => _title = value;
+
+  get description => _description;
+  set description(value) => _description = value;
+
+  get done => _done;
+  set done(value) => _done = value;
+
+  get isEdit => _isEdit;
+  set isEdit(value) => _isEdit = value;
+
+  get data => _data;
+  set data(value) => _data = value;
+
+  @override
+  void initState() {
+    super.initState();
+    _isEdit = widget._isEditing;
+    _data = widget._data;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: SafeArea(
         child: Scaffold(
-          appBar: Bar(),
-          body: Body(),
+          appBar: Bar(
+            state: this,
+          ),
+          body: Body(
+            state: this,
+          ),
         ),
       ),
     );

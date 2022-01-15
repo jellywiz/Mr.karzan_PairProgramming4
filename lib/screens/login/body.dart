@@ -17,7 +17,10 @@
 //        b. Cancel the login - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
+import 'package:exercise3/screens/edit/edit_screen.dart';
+import 'package:exercise3/services/rest.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import '../../services/user_service.dart';
 import '../../models/user.dart';
@@ -35,15 +38,20 @@ class Body extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildTextField(
-            hint: 'Username', icon: Icons.people, onChanged: (value) => () {}),
+            hint: 'Username',
+            icon: Icons.people,
+            onChanged: (value) => _state.username = value),
         _buildTextField(
             hint: 'Password',
-            isObsecure: false,
+            isObsecure: !_state.shows,
             icon: Icons.lock,
-            button: IconButton(icon: Icon(Icons.visibility), onPressed: () {}),
-            onChanged: (value) => () {}),
+            button: IconButton(
+                icon: Icon(Icons.visibility),
+                onPressed: () => _state.shows = !_state.shows),
+            onChanged: (value) => _state.password = value),
         Text(
-          'Invalid username or password!',
+          '${_state.errorM}',
+          //'Invalid username or password!',
           style: TextStyle(color: Colors.red, fontSize: 20.0),
         ),
         SizedBox(height: 10.0),
@@ -71,14 +79,35 @@ class Body extends StatelessWidget {
       children: [
         ElevatedButton(
           child: Text('Log in'),
-          onPressed: () {},
+          onPressed: () => _onLoginP(context),
         ),
         SizedBox(width: 10.0),
         ElevatedButton(
           child: Text('Cancel'),
-          onPressed: () {},
+          onPressed: () => _onCancelP(context),
         ),
       ],
     );
   }
+
+  void _onLoginP(context) async {
+    //perform authentication
+
+    if (_state.username == '' || _state.password == '') {
+      _state.errorM = 'Empty Field';
+    } else {
+      final _user = await UserService.getUserByLoginAndPassword(
+          login: _state.username, password: _state.password);
+
+      if (_user != null) {
+        var showU = User.copy(_user);
+        Navigator.pop(context,
+            User(id: showU.id, name: showU.name, photoUrl: showU.photoUrl));
+      } else {
+        _state.errorM = 'Invalid Username or Password';
+      }
+    }
+  }
+
+  void _onCancelP(context) => Navigator.pushNamed(context, '/');
 }
