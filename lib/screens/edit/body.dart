@@ -16,6 +16,7 @@
 //        b. Cancel the changes - i.e. when the 'Cancel' button is tapped on.
 //-----------------------------------------------------------------------------------------------------------------------------
 
+import 'package:exercise3/models/todo.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_screen.dart';
@@ -27,24 +28,61 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        _buildTextLisTile(
-            label: 'Title',
-            value: 'Todo title goes here',
-            onChanged: (value) {}),
-        _buildTextLisTile(
-            label: 'Description',
-            value: 'Todo description goes here',
-            onChanged: (value) {}),
-        CheckboxListTile(
-          value: false,
-          onChanged: (value) {},
+    return _buildListView(context);
+  }
+
+  ListView _buildListView(BuildContext context) {
+    print('check = ${_state.isEdit}');
+    if (_state.isEdit == true) {
+      return ListView(
+        children: [
+          _buildTextLisTile(
+              label: 'Title',
+              value: _state.data.title,
+              onChanged: (value) => _state.data.title = value),
+          _buildTextLisTile(
+              label: 'Description',
+              value: _state.data.description,
+              onChanged: (value) => _state.data.description = value),
+          _checkBoxList(),
+          _buildButtons(context)
+        ],
+      );
+    } else {
+      return ListView(
+        children: [
+          _buildTextLisTile(
+              label: 'Title',
+              value: _state.title,
+              onChanged: (value) => _state.title = value),
+          _buildTextLisTile(
+              label: 'Description',
+              value: _state.description,
+              onChanged: (value) => _state.description = value),
+          _checkBoxList(),
+          _buildButtons(context)
+        ],
+      );
+    }
+  }
+
+  Center _checkBoxList() {
+    if (_state.isEdit == true) {
+      return Center(
+        child: CheckboxListTile(
+          value: _state.data.done,
+          onChanged: (value) {
+            _state.data.done == false
+                ? _state.data.done = true
+                : _state.data.done = false;
+            print(_state.data.done);
+          },
           title: Text('Done'),
         ),
-        _buildButtons(context)
-      ],
-    );
+      );
+    } else {
+      return Center();
+    }
   }
 
   ListTile _buildTextLisTile({label, value, onChanged}) {
@@ -65,14 +103,39 @@ class Body extends StatelessWidget {
       children: [
         ElevatedButton(
           child: Text('Ok'),
-          onPressed: () {},
+          onPressed: () => _okPress(context),
         ),
         SizedBox(width: 10.0),
         ElevatedButton(
           child: Text('Cancel'),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ],
     );
+  }
+
+  void _okPress(BuildContext context) async {
+    if (_state.isEdit == false) {
+      if (_state.title != null && _state.description != null) {
+        return Navigator.pop(context,
+            Todo(title: _state.title, description: _state.description));
+      } else {
+        return Navigator.pop(context);
+      }
+    } else {
+      if (_state.title != null && _state.description != null) {
+        return Navigator.pop(
+            context,
+            Todo(
+                title: _state.data.title,
+                description: _state.data.description,
+                done: _state.data.done,
+                user: _state.data.user));
+      } else {
+        return Navigator.pop(context);
+      }
+    }
   }
 }
